@@ -21,13 +21,11 @@ flowchart LR
     Actions["GitHub Actions · deployment.md"]
     Brew["Tap Homebrew · deployment.md"]
     Anthropic["API Anthropic · integration.md"]
-    Usage["Claude Usage · integration.md · source tierce"]
 
     Human -- cli --> Github
     Agent -- cli --> Github
     Human -- cli --> Brew
     App -- http --> Anthropic
-    App -- cli --> Usage
 
     Github -- "tag de version" --> Actions
     Actions -- "publie la release" --> Github
@@ -38,5 +36,5 @@ flowchart LR
 
     class Human,Agent,App neutre
     class Github,Actions bleu
-    class Brew,Anthropic,Usage violet
+    class Brew,Anthropic violet
 ```

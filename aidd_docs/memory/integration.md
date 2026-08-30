@@ -15,7 +15,8 @@ La carte macro appartient à `ecosystem.md`.
 | Service | Sert à | Point d'intégration |
 | --- | --- | --- |
 | API Anthropic | Recommandations d'optimisation | `src/main/recommend/` |
-| Claude Usage (`usage.db`) | Accélérateur d'ingestion, optionnel | `src/ingest/` |
+
+L'API Anthropic est le seul service extérieur, et il est optionnel.
 
 `~/.claude` n'est pas un service : c'est la source de données primaire, lue et écrite par `src/main/config/`.
 
@@ -25,20 +26,18 @@ La carte macro appartient à `ecosystem.md`.
 - L'application doit démarrer et fonctionner sans elle : seul le pilier optimiser se désactive.
 - Aucun appel hors ligne, sans exception.
 
-## ⚠️ `usage.db` n'est jamais une source de vérité
+## 🚫 Aucune base d'un outil tiers
 
-Le fichier appartient à un outil tiers nommé Claude Usage.
-Les transcripts JSONL restent la source primaire ; `usage.db` n'est qu'un accélérateur.
+`usage.db` a été envisagée comme accélérateur d'ingestion, puis écartée.
+Le fichier appartient à Claude Usage, un tableau de bord tiers : ni Anthropic ni claudit n'en maîtrisent le schéma.
 
-Trois défauts imposent la méfiance.
+Les transcripts JSONL sont la seule source de consommation, et ils suffisent.
 
-| Défaut | Conséquence |
+| Raison du retrait | Détail |
 | --- | --- |
-| `schema_meta` sans numéro de version | Introspection `PRAGMA table_info` à chaque ouverture, jamais de schéma supposé |
-| Table `agents` vide | Aucune donnée d'agent n'en vient |
-| `journal_mode` à `delete` | Un journal chaud laissé par un plantage de l'autre outil empêche toute ouverture en lecture seule |
-
-L'échec silencieux est toléré et attendu : l'ingestion continue sur les JSONL seuls.
+| Aucun gain | 1,6 Go ingérés en 6,46 s |
+| Schéma non maîtrisé | `schema_meta` sans version, `agents` vide |
+| Lecture faillible | `journal_mode` à `delete`, journal bloquant |
 
 ## 💶 Le coût se calcule sur sept dimensions
 

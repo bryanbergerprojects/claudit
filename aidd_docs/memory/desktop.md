@@ -28,8 +28,7 @@ Un `worker_threads` aurait fait l'affaire, mais Vite ne sait pas encore empaquet
 | Accès | Zone | Portée |
 | --- | --- | --- |
 | Lecture-écriture de `~/.claude` | `src/main/config/` | Fichiers de configuration, deux emplacements |
-| Lecture des transcripts JSONL | `src/ingest/` | Source primaire |
-| Lecture d'`usage.db` | `src/ingest/` | Optionnelle, échec toléré |
+| Lecture des transcripts JSONL | `src/ingest/` | Source unique de consommation |
 | Réseau sortant | `src/main/recommend/` | API Anthropic seule, désactivée hors ligne |
 
 `src/core/` n'accède à rien : il ne connaît ni `electron` ni `node:fs`.

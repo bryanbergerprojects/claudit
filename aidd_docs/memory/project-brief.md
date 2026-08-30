@@ -34,7 +34,6 @@ Un contributeur doit les connaître pour lire le code.
 | --- | --- |
 | transcript | Fichier JSONL d'une session, source primaire de la consommation |
 | skill, agent, plugin | Unités de configuration éditables, réparties entre `~/.claude` et `~/.claude/plugins/` |
-| `usage.db` | Base d'un outil tiers nommé Claude Usage, accélérateur optionnel |
 | `service_tier` | Champ d'une ligne `assistant` qui conditionne la grille tarifaire appliquée |
 | tokens de réflexion | Tokens de raisonnement, comptés à part dans le champ `usage` |
 | grille tarifaire | Modèle de prix versionné dans le temps, puisque les tarifs évoluent |

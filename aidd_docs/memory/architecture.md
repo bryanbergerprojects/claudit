@@ -28,7 +28,6 @@ Le diagramme montre le trajet d'une donnée, de sa source dans `~/.claude` jusqu
 %%{init: {'theme':'base','themeVariables':{'fontFamily':'ui-sans-serif, system-ui, sans-serif','lineColor':'#94a3b8','primaryTextColor':'#334155'}}}%%
 flowchart LR
     Src[/"~/.claude"/]
-    Usg[("usage.db")]
     Ing[["ingest"]]
     Core[["core"]]
     Db[("claudit.db")]
@@ -37,7 +36,6 @@ flowchart LR
     Api[/"API Anthropic"/]
 
     Src --> Ing
-    Usg -. "optionnel" .-> Ing
     Ing --> Core --> Db
     Db --> Main --> Ui
     Main -. "hors-ligne exclu" .-> Api
@@ -49,7 +47,7 @@ flowchart LR
 
     class Ing,Core,Main,Ui bleu
     class Db vert
-    class Src,Usg,Api violet
+    class Src,Api violet
 ```
 
 ## ⚖️ Décisions structurantes

@@ -29,12 +29,10 @@ C'est le bénéfice direct de la discipline de frontière, pas un effet secondai
 
 ## ⚠️ Ce que les tests doivent couvrir en priorité
 
-Deux zones concentrent le risque de résultat faux plutôt que de plantage.
+Le calcul de coût concentre le risque de résultat faux plutôt que de plantage.
+Sept dimensions et un `service_tier` qui change la grille : une erreur produit un chiffre plausible que rien ne signale.
 
-| Zone | Pourquoi |
-| --- | --- |
-| Calcul de coût | Sept dimensions ; une erreur produit un chiffre plausible et faux |
-| Lecture d'`usage.db` | Schéma tiers sans version, l'échec doit rester silencieux et sans perte |
+Le parsing des transcripts vient ensuite, puisqu'il alimente ce calcul.
 
 ## ▶️ Lancer
 

@@ -1,7 +1,7 @@
 ---
 title: INSTALL — claudit
 status: draft
-updated: 2026-08-29
+updated: 2026-08-30
 owner: bryan
 ---
 
@@ -54,7 +54,7 @@ Le CLI est explicitement classé comme besoin spéculatif.
 - **Base de données :** SQLite locale (`claudit.db`). Le moteur reste à trancher entre `node:sqlite` et `better-sqlite3@13`
 - **Empaquetage :** `electron-builder` + `electron-vite`. Electron Forge écarté — son plugin Vite est estampillé expérimental et son gabarit reste en Vite 5, incompatible avec Vitest 4 qui exige Vite ≥ 6
 - **Outillage :** Biome pour le lint et le format, Vitest 4 pour les tests
-- **Intégrations :** fichiers de `~/.claude` en lecture et écriture · transcripts JSONL · grille tarifaire Anthropic versionnée · API Anthropic pour les recommandations · `usage.db` en lecture optionnelle
+- **Intégrations :** fichiers de `~/.claude` en lecture et écriture · transcripts JSONL · grille tarifaire Anthropic versionnée · API Anthropic pour les recommandations
 
 ### Le choix du moteur SQLite reste ouvert
 
@@ -77,7 +77,6 @@ Le diagramme montre le trajet d'une donnée, de sa source dans `~/.claude` jusqu
 %%{init: {'theme':'base','themeVariables':{'fontFamily':'ui-sans-serif, system-ui, sans-serif','lineColor':'#94a3b8','primaryTextColor':'#334155'}}}%%
 flowchart LR
     SRC[/"📂 ~/.claude"/]
-    USG[("🗃️ usage.db")]
     ING[["⚙️ ingest"]]
     PAR["🔍 core/parsing"]
     PRI["💶 core/pricing"]
@@ -88,7 +87,6 @@ flowchart LR
     API[/"🤖 API Anthropic"/]
 
     SRC --> ING
-    USG -. "optionnel" .-> ING
     ING --> PAR --> DB
     DB --> PRI --> MAIN
     DB --> AUD --> MAIN
@@ -100,7 +98,7 @@ flowchart LR
     classDef bleu fill:#eff6ff,stroke:#3b82f6,color:#1e3a8a
     classDef vert fill:#ecfdf5,stroke:#10b981,color:#065f46
 
-    class SRC,USG,API violet
+    class SRC,API violet
     class ING,PAR,PRI,AUD,MAIN,UI bleu
     class DB vert
 ```
@@ -187,14 +185,6 @@ La décision prise est d'assumer l'absence de signature pour l'instant.
 
 Le déblocage coûte 99 $/an via l'Apple Developer Program, à reconsidérer au premier partage large.
 
-### `usage.db` est une source tierce, jamais une source de vérité
-
-Le fichier appartient à un outil tiers nommé Claude Usage.
-Son `schema_meta` ne porte aucun numéro de version, sa table `agents` est vide, et son `journal_mode` vaut `delete` — donc un journal chaud laissé par un plantage de l'autre outil empêche toute ouverture en lecture seule.
-
-Il est traité comme un accélérateur optionnel, avec introspection `PRAGMA table_info` à chaque ouverture et échec silencieux toléré.
-Les transcripts JSONL restent la source primaire.
-
 ### Le calcul de coût est à sept dimensions
 
 Un simple produit entrée fois prix, plus sortie fois prix, donnerait un chiffre faux.
@@ -228,6 +218,7 @@ Le candidat retenu est **A**, augmenté de la discipline de frontière proposée
 | `worker_threads` indispensable pour tenir le budget | Confort, pas nécessité — le processus utilitaire suffit |
 | Homebrew comme repli à la mise à jour automatique | Repli invalide, les deux canaux se ferment ensemble |
 | DuckDB pertinent pour l'analytique | Gain réel à partir de 10 M de lignes, le projet en a 210 k |
+| `usage.db` comme accélérateur d'ingestion | Rien à accélérer à 6,46 s — dépendance écartée |
 
 ### Réserves non levées
 
